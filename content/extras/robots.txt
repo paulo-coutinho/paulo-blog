@@ -1,0 +1,3 @@
+Sitemap: https://pcoutinho.com/sitemap.xml
+User-Agent: *
+Host: pcoutinho.com
