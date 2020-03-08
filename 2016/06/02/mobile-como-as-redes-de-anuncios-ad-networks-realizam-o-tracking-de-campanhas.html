@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+        <meta name="description" content="Olá pessoal, Uma dúvida muito comum e também uma informação muito importante, é saber como fazer o tracking (ou rastreamento) de um usuário que fez o download e instalou um determinado aplicativo...">
+        <meta name="keywords" content="ads, analytics, campaign, campanha, install, referrer, tracking">
+
+        <meta name="author" content="Paulo Coutinho">
+        <meta name="robots" content="index,follow">
+
+        <title>Mobile - Como as redes de anúncios (Ad Networks) realizam o tracking de campanhas - Paulo Coutinho</title>
+
+
+                <meta property="og:title" content="Mobile - Como as redes de anúncios (Ad Networks) realizam o tracking de campanhas"/>
+                <meta property="twitter:title" content="Mobile - Como as redes de anúncios (Ad Networks) realizam o tracking de campanhas"/>
+                <meta property="og:type" content="article"/>
+                <meta property="twitter:card" content="summary"/>
+                <meta property="og:image" content="http://pcoutinho.com/wp-content/uploads/2016/06/ios-install-tracking-redirect.png"/>
+                <meta property="twitter:image" content="http://pcoutinho.com/wp-content/uploads/2016/06/ios-install-tracking-redirect.png"/>
+                <meta property="og:url" content="https://paulocoutinho.com/2016/06/02/mobile-como-as-redes-de-anuncios-ad-networks-realizam-o-tracking-de-campanhas.html"/>
+                <meta property="og:description" content="Olá pessoal, Uma dúvida muito comum e também uma informação muito importante, é saber como fazer o tracking (ou rastreamento) de um usuário que fez o download e instalou um determinado aplicativo através de um link, banner ou uma campanha em geral. É importante entender que não existe um jeito …"/>
+                <meta property="twitter:description" content="Olá pessoal, Uma dúvida muito comum e também uma informação muito importante, é saber como fazer o tracking (ou rastreamento) de um usuário que fez o download e instalou um determinado aplicativo através de um link, banner ou uma campanha em geral. É importante entender que não existe um jeito …"/>
+                <meta property="og:locale" content="pt_BR"/>
+                <meta property="og:site_name" content="Paulo Coutinho"/>
+                <meta property="twitter:site" content="Paulo Coutinho"/>
+                <meta property="article:published_time" content="2016-06-02"/>
+                <meta property="og:see_also" content="https://paulocoutinho.com/2017/10/16/docker-post-install-o-que-fazer-depois-de-instalar.html"/>
+                <meta property="article:section" content="Mobile"/>
+                <meta property="article:tag" content="ads"/>
+                <meta property="article:tag" content="analytics"/>
+                <meta property="article:tag" content="campaign"/>
+                <meta property="article:tag" content="campanha"/>
+                <meta property="article:tag" content="install"/>
+                <meta property="article:tag" content="referrer"/>
+                <meta property="article:tag" content="tracking"/>
+
+
+
+
+        <link rel="icon" href="https://paulocoutinho.com/favicon.ico">
+        <link rel="apple-touch-icon" sizes="180x180" href="https://paulocoutinho.com/apple-touch-icon.png">
+        <link rel="icon" type="image/png" sizes="32x32" href="https://paulocoutinho.com/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="https://paulocoutinho.com/favicon-16x16.png">
+        <link rel="manifest" href="https://paulocoutinho.com/site.webmanifest">
+
+            
+            <!-- Canonical -->
+            <link rel="canonical" href="https://paulocoutinho.com/2016/06/02/mobile-como-as-redes-de-anuncios-ad-networks-realizam-o-tracking-de-campanhas.html">
+            <!-- /Canonical -->
+            
+
+        <!-- Stylesheets -->
+            <link href="https://paulocoutinho.com/theme/css/all.min.css" rel="stylesheet">
+        <!-- /Stylesheets -->
+
+        <!-- RSS Feeds -->
+            <link href="https://paulocoutinho.com/feeds/all.atom.xml" type="application/atom+xml" rel="alternate"
+                  title="Paulo Coutinho Full Atom Feed"/>
+            <link href="https://paulocoutinho.com/feed/rss.xml" type="application/rss+xml" rel="alternate"
+                  title="Paulo Coutinho Full RSS Feed"/>
+        <!-- /RSS Feeds -->
+
+        <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+        <!--[if lt IE 9]>
+          <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+          <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+        <![endif]-->
+
+            <!-- Google Analytics -->
+            <script>
+                (function (i, s, o, g, r, a, m) {
+                    i['GoogleAnalyticsObject'] = r;
+                    i[r] = i[r] || function () {
+                        (i[r].q = i[r].q || []).push(arguments)
+                    }, i[r].l = 1 * new Date();
+                    a = s.createElement(o),
+                        m = s.getElementsByTagName(o)[0];
+                    a.async = 1;
+                    a.src = g;
+                    m.parentNode.insertBefore(a, m)
+                })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+
+                ga('create', 'UA-160006583-1', 'auto');
+                ga('send', 'pageview');
+            </script>
+            <!-- /Google Analytics -->
+
+
+</head>
+
+<body>
+
+<!-- Header -->
+    <div class="header-container gradient">
+
+<!-- Static navbar -->
+<div class="container">
+    <div class="header-nav">
+        <div class="header-logo">
+            <a class="pull-left" href="https://paulocoutinho.com/"><img class="mr20"
+                                                            src="https://paulocoutinho.com/images/logo.png"
+                                                            alt="logo">Paulo Coutinho</a>
+        </div>
+        <div class="nav pull-right">
+                    <a href="https://paulocoutinho.com/">Home</a>
+                    <a href="https://paulocoutinho.com/categories.html">Categorias</a>
+                    <a href="https://paulocoutinho.com/tags.html">Tags</a>
+                    <a                                            href="https://paulocoutinho.com/pages/meu-perfil.html">Meu Perfil</a>
+                    <a                                            href="https://paulocoutinho.com/pages/projetos.html">Projetos</a>
+        </div>
+    </div>
+</div>
+<!-- /Static navbar -->
+
+<!-- Header -->
+    <!-- Header -->
+    <div class="container header-wrapper">
+        <div class="row">
+              <div class="col-lg-12">
+                  <div class="header-content">
+                      <h1 class="header-title">Mobile - Como as redes de anúncios (Ad Networks) realizam o tracking de campanhas</h1>
+                      <p class="header-date">Por <a href="https://paulocoutinho.com/author/paulo.html">paulo</a>, Qui 02 Junho 2016, na categoria <a href="https://paulocoutinho.com/category/mobile.html">Mobile</a></p>
+                      <div class="header-underline"></div>
+                      <div class="clearfix"></div>
+                      <p class="pull-right header-tags">
+                          <span class="glyphicon glyphicon-tags mr5" aria-hidden="true"></span>
+<a href="https://paulocoutinho.com/tag/ads.html">ads</a>, <a href="https://paulocoutinho.com/tag/analytics.html">analytics</a>, <a href="https://paulocoutinho.com/tag/campaign.html">campaign</a>, <a href="https://paulocoutinho.com/tag/campanha.html">campanha</a>, <a href="https://paulocoutinho.com/tag/install.html">install</a>, <a href="https://paulocoutinho.com/tag/referrer.html">referrer</a>, <a href="https://paulocoutinho.com/tag/tracking.html">tracking</a>                      </p>
+                  </div>
+              </div>
+        </div>
+    </div>
+    <!-- /Header -->
+<!-- /Header -->
+
+</div>
+<!-- /Header -->
+
+
+<!-- Content -->
+    <div class="container content">
+        <p>Olá pessoal,</p>
+<p>Uma dúvida muito comum e também uma informação muito importante, é saber como fazer o tracking (ou rastreamento) de um usuário que fez o download e instalou um determinado aplicativo através de um link, banner ou uma campanha em geral.</p>
+<p>É importante entender que não existe um jeito fácil, simples e universal para que isso aconteça e pode ser que alguma informação se perca no meio do caminho dependendo das ações dos usuários. Cada plataforma resolveu este problema de um jeito diferente.</p>
+<h3>No caso da Apple funciona assim:</h3>
+<p>Um usuário utiliza uma ferramenta de anúncios que irá exibir um banner, link ou algo do tipo no dispositivo do usuário. O link contido neste banner é um link que contém uma informação especial chamada pela Apple de IDFA, que consiste em um token específico para anúncios e é único por device. A Apple não permite o uso desse token outro fim além de usá-lo para tracking de anúncios e qualquer tentativa fora esta terá o app rejeitado, como está em sua documentação (<a href="https://developer.apple.com/library/ios/documentation/LanguagesUtilities/Conceptual/iTunesConnect_Guide/Chapters/SubmittingTheApp.html#//apple_ref/doc/uid/TP40011225-CH33-SW8">Link 1</a>, <a href="https://support.appsflyer.com/hc/en-us/articles/207032086-New-Apple-IDFA-Guidelines-How-To-Submit-Your-iOS-App-With-IDFA">Link 2</a>, <a href="https://developers.facebook.com/docs/app-ads/targeting/mobile-advertiser-ids">Link 3</a>).</p>
+<p>Vou usar o exemplo do Google Analytics para explicar como ele consegue através do IDFA fazer o tracking de suas campanhas.</p>
+<p>Um anúncio exibido pelo Google em suas redes de anúncio teria um link com uma estrutura parecida com esta:</p>
+<blockquote>
+<p>http://click.google-analytics.com/redirect?<br>
+tid=UA-1234-1 <strong>// Google Analytics Tracking ID.</strong><br>
+&amp;idfa=BBA44F63-E469-42BA-833A-2AC550310CB3 <strong>// Identifier for Advertising (IDFA)</strong><br>
+&amp;aid=com.bundle.myapp <strong>// App ID.</strong><br>
+&amp;cs=network <strong>// Campaign source.</strong><br>
+&amp;cm=cpc <strong>// Campaign medium.</strong><br>
+&amp;cn=campaign_name <strong>// Campaign name.</strong><br>
+&amp;url=https%3A//itunes.apple.com/us/app/myApp/id123%3Fmt%3D8 <strong>// Redirect URL to iTunes.</strong></p>
+</blockquote>
+<p>Esse link do anúncio do Google vai registrar no servidor deles que você clicou nele e vai gravar as informações que ele deseja para depois juntar as peças e cruzar as informações. Após gravar o que ele precisa, ele vai redirecionar você para a loja da Apple, indo direto para o aplicativo desejado quando você clicou no anúncio.</p>
+<p>Quando você instalar o aplicativo desejado, o SDK do Google contido dentro do seu aplicativo vai obter o IDFA do seu aparelho e enviar para o servidor deles. Seria algo assim:</p>
+<blockquote>
+<p>Ah, então você é o IDFA "ABC123456" que clicou na campanha "C123", estou adicionando +1 no contador de instalação, bem como todas as informações do seu dispositivo. Obrigado.</p>
+</blockquote>
+<p>Na documentação do Google, tem mais detalhes, mas a regra é esta.</p>
+<p><a href="https://developers.google.com/analytics/solutions/ios-install-tracking#redirect">https://developers.google.com/analytics/solutions/ios-install-tracking#redirect </a></p>
+<p>Segue uma imagem que o Google fez para exemplificar seu fluxo:</p>
+<p><a href="http://pcoutinho.com/wp-content/uploads/2016/06/ios-install-tracking-redirect.png"><img alt="ios-install-tracking-redirect" class="alignnone size-full wp-image-294" height="438" src="http://pcoutinho.com/wp-content/uploads/2016/06/ios-install-tracking-redirect.png" width="825"></a></p>
+<p>A segunda solução do Google Analytics é fazer com que a rede de anúncios envie assincronamente um "ping" para a URL:</p>
+<blockquote>
+<p>click.google-analytics.com/ping?param1=value1&amp;param2=value2</p>
+</blockquote>
+<p>E com isso poderá ser feita a contabilidade também server-side posteriormente pelas ferramentas.</p>
+<h3>No caso do Google funciona assim:</h3>
+<p>O Google criou uma classe que atua como um Broadcast Receiver, que receberá estes dados assincronamente quando um usuário instalar o aplicativo através de uma campanha.</p>
+<p>Basicamente o Google Play vai fazer um broadcast com a informação somente quando o aplicativo for instalado pela loja e os dados da campanha estiverem disponíveis, ou seja, se ele veio com os parâmetros de campanha definidos quando ocorreu a instalação.</p>
+<p>Estes dados serão consumidos pelo seu broadcast que irá submeter os dados para sua plataforma de anúncios. Se você usa o SDK do Google Analytics e definiu que ele será o "recebedor" destas informações, ele será o responsável por jogar estas informações de campanha para o servidor do Google, ou então você captura e repassa isso para diversas ferramentas manualmente, pois uma limitação do Android é que só pode existir um Broadcast Receiver para Install Referrer.</p>
+<p>O AppsFlyer fez um Broadcast Receiver especial que consegue receber estes dados e depois repassar para todos os outros Broadcast Receivers que você tiver, automaticamente (<a href="https://support.appsflyer.com/hc/en-us/articles/207032146-How-Can-I-Get-the-Install-Referrer-URL-from-my-Android-App-Context-">Link de como usar</a>), permitindo então você possuir diversos Broadcast Receivers.</p>
+<p>Documentação:</p>
+<p><a href="https://developers.google.com/android/reference/com/google/android/gms/tagmanager/InstallReferrerReceiver">https://developers.google.com/android/reference/com/google/android/gms/tagmanager/InstallReferrerReceiver</a></p>
+<p><a href="https://developers.google.com/android/reference/com/google/android/gms/analytics/CampaignTrackingReceiver">https://developers.google.com/android/reference/com/google/android/gms/analytics/CampaignTrackingReceiver</a></p>
+<p>Basicamente o link no padrão para o Google Play seria assim:</p>
+<blockquote>
+<p>https://play.google.com/store/apps/details?id=com.example.application&amp;<strong>referrer=utm_source%3Dgoogle%26utm_medium%3Dcpc%26utm_term%3Drunning%252Bshoes%26utm_content%3Dlogolink%26utm_campaign%3Dspring_sale</strong></p>
+</blockquote>
+<p>É importante entender que a informação que você terá é o texto dentro do parâmetro "referrer", que deverá estar no padrão URL Encoded, ou seja, sem os símbolos "%, &amp;, =, etc".</p>
+<p>É importante também usar o gerador de URL para o Google Play para criar a URL dentro do padrão esperado (<a href="https://developers.google.com/analytics/devguides/collection/android/v4/campaigns#google-play-url-builder">Link 1</a>, <a href="https://developers.google.com/analytics/devguides/collection/android/v4/campaigns#google-play-url-builder">Link 2</a>):</p>
+<p>Se você deseja simular isso no Android, sem ter que instalar o aplicativo pela loja, afim de testar o funcionamento, execute os comandos abaixo trocando os parâmetros (<a href="http://stackoverflow.com/questions/5890914/how-to-test-android-referral-tracking/6966718#6966718">Link</a>):</p>
+<p>``` {.EnlighterJSRAW enlighter-language="shell"}
+adb shell 
+am broadcast -a com.android.vending.INSTALL_REFERRER -n <your.package>/.<path.up.until.your.BroadcastReceiver> --es "referrer" "utm_source=test_source\&amp;utm_medium=test_medium\&amp;utm_term=test_term\&amp;utm_content=test_content\&amp;utm_campaign=test_name"</p>
+<div class="highlight"><pre><span></span><code><span class="n">E</span><span class="w"> </span><span class="n">caso</span><span class="w"> </span><span class="n">você</span><span class="w"> </span><span class="n">queira</span><span class="w"> </span><span class="n">criar</span><span class="w"> </span><span class="n">seu</span><span class="w"> </span><span class="n">Broadcast</span><span class="w"> </span><span class="n">Receiver</span><span class="w"> </span><span class="n">crie</span><span class="w"> </span><span class="n">uma</span><span class="w"> </span><span class="n">classe</span><span class="w"> </span><span class="n">com</span><span class="w"> </span><span class="n">o</span><span class="w"> </span><span class="nl">conteúdo</span><span class="p">:</span><span class="w"></span>
+
+<span class="err">```</span><span class="w"> </span><span class="err">{</span><span class="p">.</span><span class="n">EnlighterJSRAW</span><span class="w"> </span><span class="n">enlighter</span><span class="o">-</span><span class="k">language</span><span class="o">=</span><span class="ss">&quot;java&quot;</span><span class="err">}</span><span class="w"></span>
+<span class="k">public</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="n">InstallReferrerReceiver</span><span class="w"> </span><span class="n">extends</span><span class="w"> </span><span class="n">BroadcastReceiver</span><span class="w"> </span><span class="err">{</span><span class="w"></span>
+<span class="w">    </span><span class="nv">@Override</span><span class="w"></span>
+<span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="n">void</span><span class="w"> </span><span class="n">onReceive</span><span class="p">(</span><span class="n">Context</span><span class="w"> </span><span class="n">context</span><span class="p">,</span><span class="w"> </span><span class="n">Intent</span><span class="w"> </span><span class="n">intent</span><span class="p">)</span><span class="w"> </span><span class="err">{</span><span class="w"></span>
+<span class="w">        </span><span class="n">String</span><span class="w"> </span><span class="n">referrer</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">intent</span><span class="p">.</span><span class="n">getStringExtra</span><span class="p">(</span><span class="ss">&quot;referrer&quot;</span><span class="p">);</span><span class="w"></span>
+
+<span class="w">        </span><span class="o">//</span><span class="k">Use</span><span class="w"> </span><span class="n">the</span><span class="w"> </span><span class="n">referrer</span><span class="w"></span>
+<span class="w">    </span><span class="err">}</span><span class="w"></span>
+<span class="err">}</span><span class="w"></span>
+</code></pre></div>
+
+
+<p>E no seu AndroidManifest.xml adicione:</p>
+<p><code>{.EnlighterJSRAW enlighter-language="xml"}
+&lt;receiver
+    android:name="com.example.android.InstallReferrerReceiver"
+    android:exported="true"&gt;
+    &lt;intent-filter&gt;
+        &lt;action android:name="com.android.vending.INSTALL_REFERRER" /&gt;
+    &lt;/intent-filter&gt;
+&lt;/receiver&gt;</code></p>
+<h3>Como funciona no caso do AppsFlyer:</h3>
+<p>Agora que você já entendeu como as plataformas se utilizam desses recursos, veja como o AppsFlyer mostrou esse funcionamento na rede deles:</p>
+<p>Links:</p>
+<p><a href="https://support.appsflyer.com/hc/en-us/articles/207032096-Accessing-AppsFlyer-Attribution-Conversion-Data-from-the-SDK-Deferred-Deeplinking-">https://support.appsflyer.com/hc/en-us/articles/207032096-Accessing-AppsFlyer-Attribution-Conversion-Data-from-the-SDK-Deferred-Deeplinking-</a></p>
+<p><a href="https://support.appsflyer.com/hc/en-us/articles/207032146-How-Can-I-Get-the-Install-Referrer-URL-from-my-Android-App-Context-">https://support.appsflyer.com/hc/en-us/articles/207032146-How-Can-I-Get-the-Install-Referrer-URL-from-my-Android-App-Context-</a></p>
+<p>Imagem:</p>
+<p><a href="http://pcoutinho.com/wp-content/uploads/2016/06/appsflyer-attribution-data.jpg"><img alt="appsflyer-attribution-data" class="alignnone size-full wp-image-295" height="780" src="http://pcoutinho.com/wp-content/uploads/2016/06/appsflyer-attribution-data.jpg" width="1237"></a></p>
+<p>No caso do Google, basicamente o usuário vai clicar em um link como este:</p>
+<blockquote>
+<p>app.appsflyer.com/angry-birds-android?pid=tapjoy_int&amp;clickid=1020fe4c7e875&amp;c=Ad1&amp;af_siteid=2684</p>
+</blockquote>
+<p>E quando o Broadcast Receiver for notificado, irá receber algo como:</p>
+<blockquote>
+<p>af_tranid=3M69WKEKDHFPRXPG&amp;pid=tapjoy_int&amp;clickid=1020fe4c7e875&amp;c=Ad1&amp;af_siteid=2684</p>
+</blockquote>
+<p>O AppsFlyer também possui uma aplicação para testar as campanhas antes de enviar o aplicativo para a loja:</p>
+<p>Para Android:</p>
+<p><a href="https://support.appsflyer.com/hc/en-us/articles/207032136-Testing-AppsFlyer-Android-SDK-Integration-Before-After-Submitting-to-Google-Play">https://support.appsflyer.com/hc/en-us/articles/207032136-Testing-AppsFlyer-Android-SDK-Integration-Before-After-Submitting-to-Google-Play</a></p>
+<p>Para iOS:</p>
+<p><a href="https://support.appsflyer.com/hc/en-us/articles/207032046-Testing-AppsFlyer-iOS-SDK-Integration-Before-Submitting-to-the-App-Store-">https://support.appsflyer.com/hc/en-us/articles/207032046-Testing-AppsFlyer-iOS-SDK-Integration-Before-Submitting-to-the-App-Store-</a></p>
+<h3>Funcionamento geral:</h3>
+<p>Há diversas formas de fazer este tracking, como por exemplo, por IP. Mas usuários que usam WIFI ou estão dentro de redes específicas podem ter o mesmo IP de saída e esta regra acaba falhando.</p>
+<p>O IDFA, no caso da Apple, ajuda neste sentido, pois você sabe quem é o usuário pois o mesmo IDFA clicado é o mesmo que gerou o evento após o aplicativo ser aberto.</p>
+<p>É claro que as informações podem se perder, o usuário podem nem mesmo abrir o aplicativo, um problema de conexão pode impedir o envio dos dados, ou ele pode simplesmente desinstalar, enfim, como regra geral essas técnicas funcionam bem e fica fácil entender como este processo funciona agora.</p>
+<p>Espero ter ajudado com este artigo.</p>
+<p>Obrigado e até o próximo post pessoal.</p>
+
+            <h4>Outros conteúdos relacionados</h4>
+            <dl class="dl-horizontal">
+                <dt>Seg 16 Outubro 2017</dt>
+                <dd><a href="https://paulocoutinho.com/2017/10/16/docker-post-install-o-que-fazer-depois-de-instalar.html">Docker - Post Install - O que fazer depois de instalar?</a></dd>
+            </dl>
+
+    <div class="comments">
+        <div id="disqus_thread"></div>
+            <script type="text/javascript">
+                var disqus_shortname = 'paulo-coutinho';
+                var disqus_identifier = '2016/06/02/mobile-como-as-redes-de-anuncios-ad-networks-realizam-o-tracking-de-campanhas.html';
+                var disqus_url = 'https://paulocoutinho.com/2016/06/02/mobile-como-as-redes-de-anuncios-ad-networks-realizam-o-tracking-de-campanhas.html';
+                (function() {
+                    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+                    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+                })();
+            </script>
+        <noscript>Please enable JavaScript to view the comments.</noscript>
+    </div>
+        
+    </div>
+<!-- /Content -->
+
+<!-- Footer -->
+<div class="footer gradient-2">
+    <div class="container footer-container ">
+        <div class="row">
+            <div class="col-xs-4 col-sm-3 col-md-3 col-lg-3">
+                <div class="footer-title">Mapa do site</div>
+                <ul class="list-unstyled">
+                        <li><a href="https://paulocoutinho.com/archives.html">Arquivos</a></li>
+                        <li><a href="https://paulocoutinho.com/tags.html">Tags</a></li>
+                        <li><a href="https://paulocoutinho.com/authors.html">Autores</a></li>
+                        <li><a href="https://paulocoutinho.com/feeds/all.atom.xml" type="application/atom+xml"
+                               rel="alternate">Atom Feed</a></li>
+                        <li><a href="https://paulocoutinho.com/feed/rss.xml" type="application/rss+xml"
+                               rel="alternate">RSS Feed</a></li>
+                </ul>
+            </div>
+            <div class="col-xs-4 col-sm-3 col-md-3 col-lg-3">
+                    <div class="footer-title">Redes sociais</div>
+                    <ul class="list-unstyled">
+                            <li><a href="https://www.youtube.com/channel/UC9rytHKniMbIxvIr6CpX6Ow" target="_blank">YouTube</a></li>
+                            <li><a href="https://twitter.com/prsolucoes" target="_blank">Twitter</a></li>
+                    </ul>
+            </div>
+            <div class="col-xs-4 col-sm-3 col-md-3 col-lg-3">
+                    <div class="footer-title">Links</div>
+                    <ul class="list-unstyled">
+                            <li><a href="https://prsolucoes.com/" target="_blank">PRSoluções</a></li>
+                    </ul>
+            </div>
+            <div class="col-xs-12 col-sm-3 col-md-3 col-lg-3">
+                <div class="footer-title">Copyright</div>
+                <p>
+                    <small>&copy; Paulo Coutinho 2020</small>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /Footer -->
+</body>
+</html>

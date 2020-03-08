@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+        <meta name="description" content="Olá, Recentemente necessitamos fazer uma comparação de arquivos para saber se os números de telefone de uma base existiam em outra e depois de várias tentativas para achar a quantidade correta de...">
+        <meta name="keywords" content="benchmark, comparar, dados, golang, gonotin, performance, script">
+
+        <meta name="author" content="Paulo Coutinho">
+        <meta name="robots" content="index,follow">
+
+        <title>Golang - Novo projeto opensource chamado Gonotin - Paulo Coutinho</title>
+
+
+                <meta property="og:title" content="Golang - Novo projeto opensource chamado Gonotin"/>
+                <meta property="twitter:title" content="Golang - Novo projeto opensource chamado Gonotin"/>
+                <meta property="og:type" content="article"/>
+                <meta property="twitter:card" content="summary"/>
+                <meta property="og:image" content="https://paulocoutinho.com/images/opengraph.png"/>
+                <meta property="twitter:image" content="https://paulocoutinho.com/images/opengraph.png"/>
+                <meta property="og:url" content="https://paulocoutinho.com/2015/10/14/golang-novo-projeto-opensource-chamado-gonotin.html"/>
+                <meta property="og:description" content="Olá, Recentemente necessitamos fazer uma comparação de arquivos para saber se os números de telefone de uma base existiam em outra e depois de várias tentativas para achar a quantidade correta de registros, eu desenvolvi alguns scripts para fazer essa comparação independente da ordem dos dados e realizando a comparação …"/>
+                <meta property="twitter:description" content="Olá, Recentemente necessitamos fazer uma comparação de arquivos para saber se os números de telefone de uma base existiam em outra e depois de várias tentativas para achar a quantidade correta de registros, eu desenvolvi alguns scripts para fazer essa comparação independente da ordem dos dados e realizando a comparação …"/>
+                <meta property="og:locale" content="pt_BR"/>
+                <meta property="og:site_name" content="Paulo Coutinho"/>
+                <meta property="twitter:site" content="Paulo Coutinho"/>
+                <meta property="article:published_time" content="2015-10-14"/>
+                <meta property="og:see_also" content="https://paulocoutinho.com/2015/11/28/que-banco-de-dados-as-grandes-empresas-usam.html"/>
+                <meta property="og:see_also" content="https://paulocoutinho.com/2016/07/31/golang-godiffexporter-exporte-seus-diffs-com-este-utilitario.html"/>
+                <meta property="og:see_also" content="https://paulocoutinho.com/2016/05/28/golandy-game-multiplayer-open-source-em-html5-com-phaser-golang-e-websocket-versao-para-desktop-browser-android-e-ios.html"/>
+                <meta property="og:see_also" content="https://paulocoutinho.com/2016/05/21/novos-projetos-open-source-goci-e-gohc-integracao-continua-e-healthcheck.html"/>
+                <meta property="og:see_also" content="https://paulocoutinho.com/2016/02/24/golang-nova-versao-1-6-suporte-nativo-a-http2.html"/>
+                <meta property="og:see_also" content="https://paulocoutinho.com/2016/01/09/golang-logstack-nova-ferramenta-criada-para-armazenar-pesquisar-e-coletar-estatisticas-de-logs.html"/>
+                <meta property="og:see_also" content="https://paulocoutinho.com/2015/11/06/golang-novas-bibliotecas-lista-thread-safe-e-web-response.html"/>
+                <meta property="og:see_also" content="https://paulocoutinho.com/2015/07/02/golang-webremotelog-um-servico-feito-com-a-linguagem-go-para-log-remoto.html"/>
+                <meta property="og:see_also" content="https://paulocoutinho.com/2016/03/04/google-apps-scripts-ferramenta-do-google-para-integracao-entre-seus-apps-automatizacao-de-tarefas-e-aplicacoes-na-loja-do-google-chrome.html"/>
+                <meta property="og:see_also" content="https://paulocoutinho.com/2015/09/22/php-script-para-executar-uma-limpeza-de-e-mails-invalidos-e-ruins-em-um-arquivo.html"/>
+                <meta property="article:section" content="Golang"/>
+                <meta property="article:tag" content="benchmark"/>
+                <meta property="article:tag" content="comparar"/>
+                <meta property="article:tag" content="dados"/>
+                <meta property="article:tag" content="golang"/>
+                <meta property="article:tag" content="gonotin"/>
+                <meta property="article:tag" content="performance"/>
+                <meta property="article:tag" content="script"/>
+
+
+
+
+        <link rel="icon" href="https://paulocoutinho.com/favicon.ico">
+        <link rel="apple-touch-icon" sizes="180x180" href="https://paulocoutinho.com/apple-touch-icon.png">
+        <link rel="icon" type="image/png" sizes="32x32" href="https://paulocoutinho.com/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="https://paulocoutinho.com/favicon-16x16.png">
+        <link rel="manifest" href="https://paulocoutinho.com/site.webmanifest">
+
+            
+            <!-- Canonical -->
+            <link rel="canonical" href="https://paulocoutinho.com/2015/10/14/golang-novo-projeto-opensource-chamado-gonotin.html">
+            <!-- /Canonical -->
+            
+
+        <!-- Stylesheets -->
+            <link href="https://paulocoutinho.com/theme/css/all.min.css" rel="stylesheet">
+        <!-- /Stylesheets -->
+
+        <!-- RSS Feeds -->
+            <link href="https://paulocoutinho.com/feeds/all.atom.xml" type="application/atom+xml" rel="alternate"
+                  title="Paulo Coutinho Full Atom Feed"/>
+            <link href="https://paulocoutinho.com/feed/rss.xml" type="application/rss+xml" rel="alternate"
+                  title="Paulo Coutinho Full RSS Feed"/>
+        <!-- /RSS Feeds -->
+
+        <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+        <!--[if lt IE 9]>
+          <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+          <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+        <![endif]-->
+
+            <!-- Google Analytics -->
+            <script>
+                (function (i, s, o, g, r, a, m) {
+                    i['GoogleAnalyticsObject'] = r;
+                    i[r] = i[r] || function () {
+                        (i[r].q = i[r].q || []).push(arguments)
+                    }, i[r].l = 1 * new Date();
+                    a = s.createElement(o),
+                        m = s.getElementsByTagName(o)[0];
+                    a.async = 1;
+                    a.src = g;
+                    m.parentNode.insertBefore(a, m)
+                })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+
+                ga('create', 'UA-160006583-1', 'auto');
+                ga('send', 'pageview');
+            </script>
+            <!-- /Google Analytics -->
+
+
+</head>
+
+<body>
+
+<!-- Header -->
+    <div class="header-container gradient">
+
+<!-- Static navbar -->
+<div class="container">
+    <div class="header-nav">
+        <div class="header-logo">
+            <a class="pull-left" href="https://paulocoutinho.com/"><img class="mr20"
+                                                            src="https://paulocoutinho.com/images/logo.png"
+                                                            alt="logo">Paulo Coutinho</a>
+        </div>
+        <div class="nav pull-right">
+                    <a href="https://paulocoutinho.com/">Home</a>
+                    <a href="https://paulocoutinho.com/categories.html">Categorias</a>
+                    <a href="https://paulocoutinho.com/tags.html">Tags</a>
+                    <a                                            href="https://paulocoutinho.com/pages/meu-perfil.html">Meu Perfil</a>
+                    <a                                            href="https://paulocoutinho.com/pages/projetos.html">Projetos</a>
+        </div>
+    </div>
+</div>
+<!-- /Static navbar -->
+
+<!-- Header -->
+    <!-- Header -->
+    <div class="container header-wrapper">
+        <div class="row">
+              <div class="col-lg-12">
+                  <div class="header-content">
+                      <h1 class="header-title">Golang - Novo projeto opensource chamado Gonotin</h1>
+                      <p class="header-date">Por <a href="https://paulocoutinho.com/author/paulo.html">paulo</a>, Qua 14 Outubro 2015, na categoria <a href="https://paulocoutinho.com/category/golang.html">Golang</a></p>
+                      <div class="header-underline"></div>
+                      <div class="clearfix"></div>
+                      <p class="pull-right header-tags">
+                          <span class="glyphicon glyphicon-tags mr5" aria-hidden="true"></span>
+<a href="https://paulocoutinho.com/tag/benchmark.html">benchmark</a>, <a href="https://paulocoutinho.com/tag/comparar.html">comparar</a>, <a href="https://paulocoutinho.com/tag/dados.html">dados</a>, <a href="https://paulocoutinho.com/tag/golang.html">golang</a>, <a href="https://paulocoutinho.com/tag/gonotin.html">gonotin</a>, <a href="https://paulocoutinho.com/tag/performance.html">performance</a>, <a href="https://paulocoutinho.com/tag/script.html">script</a>                      </p>
+                  </div>
+              </div>
+        </div>
+    </div>
+    <!-- /Header -->
+<!-- /Header -->
+
+</div>
+<!-- /Header -->
+
+
+<!-- Content -->
+    <div class="container content">
+        <p>Olá,</p>
+<p>Recentemente necessitamos fazer uma comparação de arquivos para saber se os números de telefone de uma base existiam em outra e depois de várias tentativas para achar a quantidade correta de registros, eu desenvolvi alguns scripts para fazer essa comparação independente da ordem dos dados e realizando a comparação um a um.</p>
+<p>Inicialmente fiz em PHP, porém usando a função IN_ARRAY, notei que a performance estava péssima. Com um arquivo de 200mil (2.5mb) registros esperei quase 45 minutos e ainda não tinha finalizado, por fim desisti e resolvi reescrever usando o Go.</p>
+<p>Ao reescrever o código em Go o processamento foi quase que imediato usando a abordagem do MAP. Você cria um map com a chave a valor sendo o texto que você tem e verifica se os itens existem no MAP ou não.</p>
+<p>Após esta abordagem funcionar muito bem no Go, escrevi diversas formas no PHP de processar os mesmos arquivos para fazer um benchmark de performance e a melhor performance alcançada foi usando a função ISSET.</p>
+<p>Depois decidi também criar um gerador de arquivos com números aleatórios para fazer listas com dados para os meus testes e validar possíveis erros e melhorar os scripts.</p>
+<p>Todo o código está disponível no Github de forma gratuita e pode ser acessado em:</p>
+<p><a href="https://github.com/prsolucoes/gonotin">https://github.com/prsolucoes/gonotin</a></p>
+<p>Dá pra fazer a mesma usando a função DIFF do linux/osx, porém os dados precisam estar ordenados nas duas listas.</p>
+<p>Espero com este script poder ajudar a todos que precisam resolver este problema de forma prática.</p>
+<p>Obrigado e até o próximo post pessoal.</p>
+
+            <h4>Outros conteúdos relacionados</h4>
+            <dl class="dl-horizontal">
+                <dt>Sáb 28 Novembro 2015</dt>
+                <dd><a href="https://paulocoutinho.com/2015/11/28/que-banco-de-dados-as-grandes-empresas-usam.html">Que banco de dados as grandes empresas usam?</a></dd>
+                <dt>Dom 31 Julho 2016</dt>
+                <dd><a href="https://paulocoutinho.com/2016/07/31/golang-godiffexporter-exporte-seus-diffs-com-este-utilitario.html">Golang - GoDiffExporter - Exporte seus DIFFs com este utilitário</a></dd>
+                <dt>Sáb 28 Maio 2016</dt>
+                <dd><a href="https://paulocoutinho.com/2016/05/28/golandy-game-multiplayer-open-source-em-html5-com-phaser-golang-e-websocket-versao-para-desktop-browser-android-e-ios.html">Golandy - Game multiplayer open-source em HTML5 com Phaser + Golang e WebSocket - Versão para desktop, browser, android e iOS</a></dd>
+                <dt>Sáb 21 Maio 2016</dt>
+                <dd><a href="https://paulocoutinho.com/2016/05/21/novos-projetos-open-source-goci-e-gohc-integracao-continua-e-healthcheck.html">Novos projetos open-source: GoCI e GoHC (integração contínua e healthcheck)</a></dd>
+                <dt>Qua 24 Fevereiro 2016</dt>
+                <dd><a href="https://paulocoutinho.com/2016/02/24/golang-nova-versao-1-6-suporte-nativo-a-http2.html">Golang - Nova versão 1.6 (suporte nativo a HTTP2)</a></dd>
+                <dt>Sáb 09 Janeiro 2016</dt>
+                <dd><a href="https://paulocoutinho.com/2016/01/09/golang-logstack-nova-ferramenta-criada-para-armazenar-pesquisar-e-coletar-estatisticas-de-logs.html">Golang - LogStack - Nova ferramenta criada para armazenar, pesquisar e coletar estatísticas de Logs</a></dd>
+                <dt>Sex 06 Novembro 2015</dt>
+                <dd><a href="https://paulocoutinho.com/2015/11/06/golang-novas-bibliotecas-lista-thread-safe-e-web-response.html">Golang - Novas bibliotecas - Lista thread safe e web response</a></dd>
+                <dt>Qui 02 Julho 2015</dt>
+                <dd><a href="https://paulocoutinho.com/2015/07/02/golang-webremotelog-um-servico-feito-com-a-linguagem-go-para-log-remoto.html">Golang - WebRemoteLog - Um serviço feito com a linguagem Go para log remoto</a></dd>
+                <dt>Sex 04 Março 2016</dt>
+                <dd><a href="https://paulocoutinho.com/2016/03/04/google-apps-scripts-ferramenta-do-google-para-integracao-entre-seus-apps-automatizacao-de-tarefas-e-aplicacoes-na-loja-do-google-chrome.html">Google Apps Scripts - Ferramenta do Google para integração entre seus apps, automatização de tarefas e aplicações na loja do Google Chrome</a></dd>
+                <dt>Ter 22 Setembro 2015</dt>
+                <dd><a href="https://paulocoutinho.com/2015/09/22/php-script-para-executar-uma-limpeza-de-e-mails-invalidos-e-ruins-em-um-arquivo.html">PHP - Script para executar uma limpeza de e-mails inválidos e ruins em um arquivo</a></dd>
+            </dl>
+
+    <div class="comments">
+        <div id="disqus_thread"></div>
+            <script type="text/javascript">
+                var disqus_shortname = 'paulo-coutinho';
+                var disqus_identifier = '2015/10/14/golang-novo-projeto-opensource-chamado-gonotin.html';
+                var disqus_url = 'https://paulocoutinho.com/2015/10/14/golang-novo-projeto-opensource-chamado-gonotin.html';
+                (function() {
+                    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+                    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+                })();
+            </script>
+        <noscript>Please enable JavaScript to view the comments.</noscript>
+    </div>
+        
+    </div>
+<!-- /Content -->
+
+<!-- Footer -->
+<div class="footer gradient-2">
+    <div class="container footer-container ">
+        <div class="row">
+            <div class="col-xs-4 col-sm-3 col-md-3 col-lg-3">
+                <div class="footer-title">Mapa do site</div>
+                <ul class="list-unstyled">
+                        <li><a href="https://paulocoutinho.com/archives.html">Arquivos</a></li>
+                        <li><a href="https://paulocoutinho.com/tags.html">Tags</a></li>
+                        <li><a href="https://paulocoutinho.com/authors.html">Autores</a></li>
+                        <li><a href="https://paulocoutinho.com/feeds/all.atom.xml" type="application/atom+xml"
+                               rel="alternate">Atom Feed</a></li>
+                        <li><a href="https://paulocoutinho.com/feed/rss.xml" type="application/rss+xml"
+                               rel="alternate">RSS Feed</a></li>
+                </ul>
+            </div>
+            <div class="col-xs-4 col-sm-3 col-md-3 col-lg-3">
+                    <div class="footer-title">Redes sociais</div>
+                    <ul class="list-unstyled">
+                            <li><a href="https://www.youtube.com/channel/UC9rytHKniMbIxvIr6CpX6Ow" target="_blank">YouTube</a></li>
+                            <li><a href="https://twitter.com/prsolucoes" target="_blank">Twitter</a></li>
+                    </ul>
+            </div>
+            <div class="col-xs-4 col-sm-3 col-md-3 col-lg-3">
+                    <div class="footer-title">Links</div>
+                    <ul class="list-unstyled">
+                            <li><a href="https://prsolucoes.com/" target="_blank">PRSoluções</a></li>
+                    </ul>
+            </div>
+            <div class="col-xs-12 col-sm-3 col-md-3 col-lg-3">
+                <div class="footer-title">Copyright</div>
+                <p>
+                    <small>&copy; Paulo Coutinho 2020</small>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /Footer -->
+</body>
+</html>

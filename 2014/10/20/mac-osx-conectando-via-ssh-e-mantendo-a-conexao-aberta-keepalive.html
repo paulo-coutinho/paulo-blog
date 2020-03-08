@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+        <meta name="description" content="Olá pessoal, Esta dica é bem importante e resolve o problema de muita gente que ao conectar via SSH em uma máquina, percebe que depois de algum tempo a conexão é encerrada, necessitando criar uma...">
+        <meta name="keywords" content="connection, keepalive, mac, openssh, osx, ssh, terminal, timeout">
+
+        <meta name="author" content="Paulo Coutinho">
+        <meta name="robots" content="index,follow">
+
+        <title>Mac - OSX - Conectando via SSH e mantendo a conexão aberta (KeepAlive) - Paulo Coutinho</title>
+
+
+                <meta property="og:title" content="Mac - OSX - Conectando via SSH e mantendo a conexão aberta (KeepAlive)"/>
+                <meta property="twitter:title" content="Mac - OSX - Conectando via SSH e mantendo a conexão aberta (KeepAlive)"/>
+                <meta property="og:type" content="article"/>
+                <meta property="twitter:card" content="summary"/>
+                <meta property="og:image" content="https://paulocoutinho.com/images/opengraph.png"/>
+                <meta property="twitter:image" content="https://paulocoutinho.com/images/opengraph.png"/>
+                <meta property="og:url" content="https://paulocoutinho.com/2014/10/20/mac-osx-conectando-via-ssh-e-mantendo-a-conexao-aberta-keepalive.html"/>
+                <meta property="og:description" content="Olá pessoal, Esta dica é bem importante e resolve o problema de muita gente que ao conectar via SSH em uma máquina, percebe que depois de algum tempo a conexão é encerrada, necessitando criar uma nova. Isso ocorre devido ao cliente OpenSSH que vem no Mac (OSX) não enviar o …"/>
+                <meta property="twitter:description" content="Olá pessoal, Esta dica é bem importante e resolve o problema de muita gente que ao conectar via SSH em uma máquina, percebe que depois de algum tempo a conexão é encerrada, necessitando criar uma nova. Isso ocorre devido ao cliente OpenSSH que vem no Mac (OSX) não enviar o …"/>
+                <meta property="og:locale" content="pt_BR"/>
+                <meta property="og:site_name" content="Paulo Coutinho"/>
+                <meta property="twitter:site" content="Paulo Coutinho"/>
+                <meta property="article:published_time" content="2014-10-20"/>
+                <meta property="og:see_also" content="https://paulocoutinho.com/2018/01/24/trocando-a-versao-do-python-no-macos.html"/>
+                <meta property="og:see_also" content="https://paulocoutinho.com/2016/05/13/osx-removendo-todos-os-arquivos-ds_store.html"/>
+                <meta property="og:see_also" content="https://paulocoutinho.com/2016/04/18/osx-deixando-o-seu-terminal-colorido-e-com-suporte-ao-git.html"/>
+                <meta property="og:see_also" content="https://paulocoutinho.com/2014/10/14/php-atualizando-o-php-no-mac-osx.html"/>
+                <meta property="og:see_also" content="https://paulocoutinho.com/2017/12/16/correcao-para-abrir-uma-aplicacao-supostamente-corrompida-no-mac.html"/>
+                <meta property="og:see_also" content="https://paulocoutinho.com/2016/10/20/instalando-drivers-nao-assinados-unsigned-no-macosx.html"/>
+                <meta property="og:see_also" content="https://paulocoutinho.com/2015/11/23/mac-osx-desabilitando-o-ganho-automatico-do-microfone-no-skype.html"/>
+                <meta property="og:see_also" content="https://paulocoutinho.com/2016/02/26/golang-ferramenta-para-upload-do-arquivo-dsym-para-o-fabriccrashlytics.html"/>
+                <meta property="og:see_also" content="https://paulocoutinho.com/2016/07/22/android-debug-de-aplicacao-via-wifi-usando-adb-sem-precisar-de-root.html"/>
+                <meta property="og:see_also" content="https://paulocoutinho.com/2014/10/14/php-composer-facilitando-a-vida-de-quem-usa.html"/>
+                <meta property="article:section" content="Mac - OSX"/>
+                <meta property="article:tag" content="connection"/>
+                <meta property="article:tag" content="keepalive"/>
+                <meta property="article:tag" content="mac"/>
+                <meta property="article:tag" content="openssh"/>
+                <meta property="article:tag" content="osx"/>
+                <meta property="article:tag" content="ssh"/>
+                <meta property="article:tag" content="terminal"/>
+                <meta property="article:tag" content="timeout"/>
+
+
+
+
+        <link rel="icon" href="https://paulocoutinho.com/favicon.ico">
+        <link rel="apple-touch-icon" sizes="180x180" href="https://paulocoutinho.com/apple-touch-icon.png">
+        <link rel="icon" type="image/png" sizes="32x32" href="https://paulocoutinho.com/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="https://paulocoutinho.com/favicon-16x16.png">
+        <link rel="manifest" href="https://paulocoutinho.com/site.webmanifest">
+
+            
+            <!-- Canonical -->
+            <link rel="canonical" href="https://paulocoutinho.com/2014/10/20/mac-osx-conectando-via-ssh-e-mantendo-a-conexao-aberta-keepalive.html">
+            <!-- /Canonical -->
+            
+
+        <!-- Stylesheets -->
+            <link href="https://paulocoutinho.com/theme/css/all.min.css" rel="stylesheet">
+        <!-- /Stylesheets -->
+
+        <!-- RSS Feeds -->
+            <link href="https://paulocoutinho.com/feeds/all.atom.xml" type="application/atom+xml" rel="alternate"
+                  title="Paulo Coutinho Full Atom Feed"/>
+            <link href="https://paulocoutinho.com/feed/rss.xml" type="application/rss+xml" rel="alternate"
+                  title="Paulo Coutinho Full RSS Feed"/>
+        <!-- /RSS Feeds -->
+
+        <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+        <!--[if lt IE 9]>
+          <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+          <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+        <![endif]-->
+
+            <!-- Google Analytics -->
+            <script>
+                (function (i, s, o, g, r, a, m) {
+                    i['GoogleAnalyticsObject'] = r;
+                    i[r] = i[r] || function () {
+                        (i[r].q = i[r].q || []).push(arguments)
+                    }, i[r].l = 1 * new Date();
+                    a = s.createElement(o),
+                        m = s.getElementsByTagName(o)[0];
+                    a.async = 1;
+                    a.src = g;
+                    m.parentNode.insertBefore(a, m)
+                })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+
+                ga('create', 'UA-160006583-1', 'auto');
+                ga('send', 'pageview');
+            </script>
+            <!-- /Google Analytics -->
+
+
+</head>
+
+<body>
+
+<!-- Header -->
+    <div class="header-container gradient">
+
+<!-- Static navbar -->
+<div class="container">
+    <div class="header-nav">
+        <div class="header-logo">
+            <a class="pull-left" href="https://paulocoutinho.com/"><img class="mr20"
+                                                            src="https://paulocoutinho.com/images/logo.png"
+                                                            alt="logo">Paulo Coutinho</a>
+        </div>
+        <div class="nav pull-right">
+                    <a href="https://paulocoutinho.com/">Home</a>
+                    <a href="https://paulocoutinho.com/categories.html">Categorias</a>
+                    <a href="https://paulocoutinho.com/tags.html">Tags</a>
+                    <a                                            href="https://paulocoutinho.com/pages/meu-perfil.html">Meu Perfil</a>
+                    <a                                            href="https://paulocoutinho.com/pages/projetos.html">Projetos</a>
+        </div>
+    </div>
+</div>
+<!-- /Static navbar -->
+
+<!-- Header -->
+    <!-- Header -->
+    <div class="container header-wrapper">
+        <div class="row">
+              <div class="col-lg-12">
+                  <div class="header-content">
+                      <h1 class="header-title">Mac - OSX - Conectando via SSH e mantendo a conexão aberta (KeepAlive)</h1>
+                      <p class="header-date">Por <a href="https://paulocoutinho.com/author/paulo.html">paulo</a>, Seg 20 Outubro 2014, na categoria <a href="https://paulocoutinho.com/category/mac-osx.html">Mac - osx</a></p>
+                      <div class="header-underline"></div>
+                      <div class="clearfix"></div>
+                      <p class="pull-right header-tags">
+                          <span class="glyphicon glyphicon-tags mr5" aria-hidden="true"></span>
+<a href="https://paulocoutinho.com/tag/connection.html">connection</a>, <a href="https://paulocoutinho.com/tag/keepalive.html">keepalive</a>, <a href="https://paulocoutinho.com/tag/mac.html">mac</a>, <a href="https://paulocoutinho.com/tag/openssh.html">openssh</a>, <a href="https://paulocoutinho.com/tag/osx.html">osx</a>, <a href="https://paulocoutinho.com/tag/ssh.html">ssh</a>, <a href="https://paulocoutinho.com/tag/terminal.html">terminal</a>, <a href="https://paulocoutinho.com/tag/timeout.html">timeout</a>                      </p>
+                  </div>
+              </div>
+        </div>
+    </div>
+    <!-- /Header -->
+<!-- /Header -->
+
+</div>
+<!-- /Header -->
+
+
+<!-- Content -->
+    <div class="container content">
+        <p>Olá pessoal,</p>
+<p>Esta dica é bem importante e resolve o problema de muita gente que ao conectar via <strong>SSH</strong> em uma máquina, percebe que depois de algum tempo a conexão é encerrada, necessitando criar uma nova.</p>
+<p>Isso ocorre devido ao cliente <strong>OpenSSH</strong> que vem no <strong>Mac (OSX)</strong> não enviar o comando de <strong>Keep Alive (manter vivo)</strong>, que como o nome já diz, mantém a conexão <strong>"viva"</strong>.</p>
+<p>Para fazer isso siga os passos abaixo executando os comandos direto no terminal:</p>
+<p>1 - Abra o terminal</p>
+<p>2 - Crie a pasta <strong>"\~/.ssh/"</strong> (caso já não exista) com o comando:</p>
+<div class="highlight"><pre><span></span><code><span class="err">mkdir ~/.ssh/</span>
+</code></pre></div>
+
+
+<p>3 - Edite o arquivo <strong>"config"</strong> com o programa "nano" (caso ele não exista, o próprio <strong>"nano"</strong> criará):</p>
+<div class="highlight"><pre><span></span><code><span class="err">nano ~/.ssh/config</span>
+</code></pre></div>
+
+
+<p>4 - Adicione as linhas:</p>
+<div class="highlight"><pre><span></span><code><span class="err">Host *</span>
+<span class="err">    ServerAliveInterval 60</span>
+</code></pre></div>
+
+
+<p>5 - Salve o arquivo com <strong>CONTROL + O</strong></p>
+<p>6 - Feche o editor com <strong>CONTROL + X</strong></p>
+<p>7 - Reinicie o terminal para que as mudanças tenham efeito.</p>
+<p>Existe uma forma de fazer diretamente na execução do comando SSH, assim:</p>
+<div class="highlight"><pre><span></span><code><span class="err">ssh -o ServerAliveInterval=60 servidor.com</span>
+</code></pre></div>
+
+
+<p>Obs: Você pode experimentar diferentes intervalos de tempo do envio da informação do keep alive.</p>
+<p>Obrigado e até o próximo post pessoal.</p>
+
+            <h4>Outros conteúdos relacionados</h4>
+            <dl class="dl-horizontal">
+                <dt>Qua 24 Janeiro 2018</dt>
+                <dd><a href="https://paulocoutinho.com/2018/01/24/trocando-a-versao-do-python-no-macos.html">Trocando a versão do Python no macOS</a></dd>
+                <dt>Sex 13 Maio 2016</dt>
+                <dd><a href="https://paulocoutinho.com/2016/05/13/osx-removendo-todos-os-arquivos-ds_store.html">OSX - Removendo todos os arquivos .DS_Store</a></dd>
+                <dt>Seg 18 Abril 2016</dt>
+                <dd><a href="https://paulocoutinho.com/2016/04/18/osx-deixando-o-seu-terminal-colorido-e-com-suporte-ao-git.html">OSX - Deixando o seu terminal colorido e com suporte ao Git</a></dd>
+                <dt>Ter 14 Outubro 2014</dt>
+                <dd><a href="https://paulocoutinho.com/2014/10/14/php-atualizando-o-php-no-mac-osx.html">PHP - Atualizando o PHP no Mac - OSX</a></dd>
+                <dt>Sáb 16 Dezembro 2017</dt>
+                <dd><a href="https://paulocoutinho.com/2017/12/16/correcao-para-abrir-uma-aplicacao-supostamente-corrompida-no-mac.html">Correção para abrir uma aplicação supostamente corrompida no Mac</a></dd>
+                <dt>Qui 20 Outubro 2016</dt>
+                <dd><a href="https://paulocoutinho.com/2016/10/20/instalando-drivers-nao-assinados-unsigned-no-macosx.html">Instalando drivers não assinados (unsigned) no Mac/OSX</a></dd>
+                <dt>Seg 23 Novembro 2015</dt>
+                <dd><a href="https://paulocoutinho.com/2015/11/23/mac-osx-desabilitando-o-ganho-automatico-do-microfone-no-skype.html">Mac OSX - Desabilitando o ganho automático do microfone no Skype</a></dd>
+                <dt>Sex 26 Fevereiro 2016</dt>
+                <dd><a href="https://paulocoutinho.com/2016/02/26/golang-ferramenta-para-upload-do-arquivo-dsym-para-o-fabriccrashlytics.html">Golang - Ferramenta para upload do arquivo DSYM para o Fabric/Crashlytics</a></dd>
+                <dt>Sex 22 Julho 2016</dt>
+                <dd><a href="https://paulocoutinho.com/2016/07/22/android-debug-de-aplicacao-via-wifi-usando-adb-sem-precisar-de-root.html">Android - Debug de aplicação via WiFi usando ADB sem precisar de root</a></dd>
+                <dt>Ter 14 Outubro 2014</dt>
+                <dd><a href="https://paulocoutinho.com/2014/10/14/php-composer-facilitando-a-vida-de-quem-usa.html">PHP - Composer - Facilitando a vida de quem usa</a></dd>
+            </dl>
+
+    <div class="comments">
+        <div id="disqus_thread"></div>
+            <script type="text/javascript">
+                var disqus_shortname = 'paulo-coutinho';
+                var disqus_identifier = '2014/10/20/mac-osx-conectando-via-ssh-e-mantendo-a-conexao-aberta-keepalive.html';
+                var disqus_url = 'https://paulocoutinho.com/2014/10/20/mac-osx-conectando-via-ssh-e-mantendo-a-conexao-aberta-keepalive.html';
+                (function() {
+                    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+                    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+                })();
+            </script>
+        <noscript>Please enable JavaScript to view the comments.</noscript>
+    </div>
+        
+    </div>
+<!-- /Content -->
+
+<!-- Footer -->
+<div class="footer gradient-2">
+    <div class="container footer-container ">
+        <div class="row">
+            <div class="col-xs-4 col-sm-3 col-md-3 col-lg-3">
+                <div class="footer-title">Mapa do site</div>
+                <ul class="list-unstyled">
+                        <li><a href="https://paulocoutinho.com/archives.html">Arquivos</a></li>
+                        <li><a href="https://paulocoutinho.com/tags.html">Tags</a></li>
+                        <li><a href="https://paulocoutinho.com/authors.html">Autores</a></li>
+                        <li><a href="https://paulocoutinho.com/feeds/all.atom.xml" type="application/atom+xml"
+                               rel="alternate">Atom Feed</a></li>
+                        <li><a href="https://paulocoutinho.com/feed/rss.xml" type="application/rss+xml"
+                               rel="alternate">RSS Feed</a></li>
+                </ul>
+            </div>
+            <div class="col-xs-4 col-sm-3 col-md-3 col-lg-3">
+                    <div class="footer-title">Redes sociais</div>
+                    <ul class="list-unstyled">
+                            <li><a href="https://www.youtube.com/channel/UC9rytHKniMbIxvIr6CpX6Ow" target="_blank">YouTube</a></li>
+                            <li><a href="https://twitter.com/prsolucoes" target="_blank">Twitter</a></li>
+                    </ul>
+            </div>
+            <div class="col-xs-4 col-sm-3 col-md-3 col-lg-3">
+                    <div class="footer-title">Links</div>
+                    <ul class="list-unstyled">
+                            <li><a href="https://prsolucoes.com/" target="_blank">PRSoluções</a></li>
+                    </ul>
+            </div>
+            <div class="col-xs-12 col-sm-3 col-md-3 col-lg-3">
+                <div class="footer-title">Copyright</div>
+                <p>
+                    <small>&copy; Paulo Coutinho 2020</small>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /Footer -->
+</body>
+</html>

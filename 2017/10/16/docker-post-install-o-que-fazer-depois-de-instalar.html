@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+        <meta name="description" content="Olá, Recentemente tive alguns problemas com o Docker relacionados não com ele, mas com os logs gerados por ele e o espaço em disco disponível que eu tinha em uma instância na AWS. Após muito...">
+        <meta name="keywords" content="clean, clear, docker, install, logs, post">
+
+        <meta name="author" content="Paulo Coutinho">
+        <meta name="robots" content="index,follow">
+
+        <title>Docker - Post Install - O que fazer depois de instalar? - Paulo Coutinho</title>
+
+
+                <meta property="og:title" content="Docker - Post Install - O que fazer depois de instalar?"/>
+                <meta property="twitter:title" content="Docker - Post Install - O que fazer depois de instalar?"/>
+                <meta property="og:type" content="article"/>
+                <meta property="twitter:card" content="summary"/>
+                <meta property="og:image" content="https://paulocoutinho.com/images/opengraph.png"/>
+                <meta property="twitter:image" content="https://paulocoutinho.com/images/opengraph.png"/>
+                <meta property="og:url" content="https://paulocoutinho.com/2017/10/16/docker-post-install-o-que-fazer-depois-de-instalar.html"/>
+                <meta property="og:description" content="Olá, Recentemente tive alguns problemas com o Docker relacionados não com ele, mas com os logs gerados por ele e o espaço em disco disponível que eu tinha em uma instância na AWS. Após muito varrer o disco em busca dos dados que mais ocupavam espaço, vi que os logs …"/>
+                <meta property="twitter:description" content="Olá, Recentemente tive alguns problemas com o Docker relacionados não com ele, mas com os logs gerados por ele e o espaço em disco disponível que eu tinha em uma instância na AWS. Após muito varrer o disco em busca dos dados que mais ocupavam espaço, vi que os logs …"/>
+                <meta property="og:locale" content="pt_BR"/>
+                <meta property="og:site_name" content="Paulo Coutinho"/>
+                <meta property="twitter:site" content="Paulo Coutinho"/>
+                <meta property="article:published_time" content="2017-10-16"/>
+                <meta property="og:see_also" content="https://paulocoutinho.com/2016/05/13/osx-removendo-todos-os-arquivos-ds_store.html"/>
+                <meta property="og:see_also" content="https://paulocoutinho.com/2019/09/14/corrigindo-o-problema-de-permissao-no-wordpress-com-docker.html"/>
+                <meta property="og:see_also" content="https://paulocoutinho.com/2016/12/16/limpando-os-dados-do-docker-em-sua-maquina-containers-e-imagens.html"/>
+                <meta property="og:see_also" content="https://paulocoutinho.com/2016/02/29/docker-toolbox-nova-ferramenta-que-ajuda-na-instalacao-e-configuracao-do-ambiente-em-forma-de-instalador.html"/>
+                <meta property="og:see_also" content="https://paulocoutinho.com/2016/06/02/mobile-como-as-redes-de-anuncios-ad-networks-realizam-o-tracking-de-campanhas.html"/>
+                <meta property="article:section" content="Docker"/>
+                <meta property="article:tag" content="clean"/>
+                <meta property="article:tag" content="clear"/>
+                <meta property="article:tag" content="docker"/>
+                <meta property="article:tag" content="install"/>
+                <meta property="article:tag" content="logs"/>
+                <meta property="article:tag" content="post"/>
+
+
+
+
+        <link rel="icon" href="https://paulocoutinho.com/favicon.ico">
+        <link rel="apple-touch-icon" sizes="180x180" href="https://paulocoutinho.com/apple-touch-icon.png">
+        <link rel="icon" type="image/png" sizes="32x32" href="https://paulocoutinho.com/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="https://paulocoutinho.com/favicon-16x16.png">
+        <link rel="manifest" href="https://paulocoutinho.com/site.webmanifest">
+
+            
+            <!-- Canonical -->
+            <link rel="canonical" href="https://paulocoutinho.com/2017/10/16/docker-post-install-o-que-fazer-depois-de-instalar.html">
+            <!-- /Canonical -->
+            
+
+        <!-- Stylesheets -->
+            <link href="https://paulocoutinho.com/theme/css/all.min.css" rel="stylesheet">
+        <!-- /Stylesheets -->
+
+        <!-- RSS Feeds -->
+            <link href="https://paulocoutinho.com/feeds/all.atom.xml" type="application/atom+xml" rel="alternate"
+                  title="Paulo Coutinho Full Atom Feed"/>
+            <link href="https://paulocoutinho.com/feed/rss.xml" type="application/rss+xml" rel="alternate"
+                  title="Paulo Coutinho Full RSS Feed"/>
+        <!-- /RSS Feeds -->
+
+        <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+        <!--[if lt IE 9]>
+          <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+          <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+        <![endif]-->
+
+            <!-- Google Analytics -->
+            <script>
+                (function (i, s, o, g, r, a, m) {
+                    i['GoogleAnalyticsObject'] = r;
+                    i[r] = i[r] || function () {
+                        (i[r].q = i[r].q || []).push(arguments)
+                    }, i[r].l = 1 * new Date();
+                    a = s.createElement(o),
+                        m = s.getElementsByTagName(o)[0];
+                    a.async = 1;
+                    a.src = g;
+                    m.parentNode.insertBefore(a, m)
+                })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+
+                ga('create', 'UA-160006583-1', 'auto');
+                ga('send', 'pageview');
+            </script>
+            <!-- /Google Analytics -->
+
+
+</head>
+
+<body>
+
+<!-- Header -->
+    <div class="header-container gradient">
+
+<!-- Static navbar -->
+<div class="container">
+    <div class="header-nav">
+        <div class="header-logo">
+            <a class="pull-left" href="https://paulocoutinho.com/"><img class="mr20"
+                                                            src="https://paulocoutinho.com/images/logo.png"
+                                                            alt="logo">Paulo Coutinho</a>
+        </div>
+        <div class="nav pull-right">
+                    <a href="https://paulocoutinho.com/">Home</a>
+                    <a href="https://paulocoutinho.com/categories.html">Categorias</a>
+                    <a href="https://paulocoutinho.com/tags.html">Tags</a>
+                    <a                                            href="https://paulocoutinho.com/pages/meu-perfil.html">Meu Perfil</a>
+                    <a                                            href="https://paulocoutinho.com/pages/projetos.html">Projetos</a>
+        </div>
+    </div>
+</div>
+<!-- /Static navbar -->
+
+<!-- Header -->
+    <!-- Header -->
+    <div class="container header-wrapper">
+        <div class="row">
+              <div class="col-lg-12">
+                  <div class="header-content">
+                      <h1 class="header-title">Docker - Post Install - O que fazer depois de instalar?</h1>
+                      <p class="header-date">Por <a href="https://paulocoutinho.com/author/paulo.html">paulo</a>, Seg 16 Outubro 2017, na categoria <a href="https://paulocoutinho.com/category/docker.html">Docker</a></p>
+                      <div class="header-underline"></div>
+                      <div class="clearfix"></div>
+                      <p class="pull-right header-tags">
+                          <span class="glyphicon glyphicon-tags mr5" aria-hidden="true"></span>
+<a href="https://paulocoutinho.com/tag/clean.html">clean</a>, <a href="https://paulocoutinho.com/tag/clear.html">clear</a>, <a href="https://paulocoutinho.com/tag/docker.html">docker</a>, <a href="https://paulocoutinho.com/tag/install.html">install</a>, <a href="https://paulocoutinho.com/tag/logs.html">logs</a>, <a href="https://paulocoutinho.com/tag/post.html">post</a>                      </p>
+                  </div>
+              </div>
+        </div>
+    </div>
+    <!-- /Header -->
+<!-- /Header -->
+
+</div>
+<!-- /Header -->
+
+
+<!-- Content -->
+    <div class="container content">
+        <p>Olá,</p>
+<p>Recentemente tive alguns problemas com o <strong>Docker</strong> relacionados não com ele, mas com os logs gerados por ele e o espaço em disco disponível que eu tinha em uma instância na AWS.</p>
+<p>Após muito varrer o disco em busca dos dados que mais ocupavam espaço, vi que os logs estavam crescendo exponencialmente e decidi usar o <strong>logrotate</strong>, um utilitário pro Linux para rotacionar os logs quando estes atingem as regras que você define em um arquivo de configuração.</p>
+<p>Para instalar o <strong>logrotate</strong>, execute:</p>
+<p>``` {.EnlighterJSRAW enlighter-language="shell"}
+sudo apt-get update
+sudo apt-get install logrotate</p>
+<div class="highlight"><pre><span></span><code><span class="n">Após</span> <span class="n">instalar</span> <span class="k">execute</span> <span class="o">**</span><span class="ss">&quot;logrotate&quot;</span><span class="o">**</span> <span class="n">para</span> <span class="n">saber</span> <span class="n">se</span> <span class="n">está</span> <span class="n">instalado</span> <span class="n">corretamente</span><span class="p">.</span>
+
+<span class="n">Após</span> <span class="n">instalar</span><span class="p">,</span> <span class="n">precisamos</span> <span class="n">configurar</span> <span class="n">uma</span> <span class="n">regra</span> <span class="k">no</span> <span class="o">**</span><span class="n">logrotate</span><span class="o">**</span> <span class="n">para</span> <span class="n">os</span> <span class="o">**</span><span class="n">logs</span> <span class="k">do</span> <span class="n">Docker</span><span class="o">**</span><span class="p">.</span> <span class="n">Então</span> <span class="k">execute</span><span class="p">:</span>
+
+<span class="o">```</span> <span class="err">{</span><span class="p">.</span><span class="n">EnlighterJSRAW</span> <span class="n">enlighter</span><span class="o">-</span><span class="k">language</span><span class="o">=</span><span class="ss">&quot;shell&quot;</span><span class="err">}</span>
+<span class="n">nano</span> <span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">logrotate</span><span class="p">.</span><span class="n">d</span><span class="o">/</span><span class="n">docker</span><span class="o">-</span><span class="n">container</span>
+</code></pre></div>
+
+
+<p>Obs: Eu usei o "nano", mas você pode usar o "vi" ou "vim" se preferir. Dentro do editor, cole a seguinte regra para o logrotate:</p>
+<p>``` {.EnlighterJSRAW enlighter-language="null"}
+/var/lib/docker/containers/<em>/</em>.log {
+  rotate 7
+  daily
+  compress
+  size=1M
+  missingok
+  delaycompress
+  copytruncate
+}</p>
+<div class="highlight"><pre><span></span><code><span class="n">Salve</span> <span class="n">o</span> <span class="n">arquivo</span><span class="p">,</span> <span class="n">feche</span> <span class="n">o</span> <span class="n">editor</span> <span class="n">e</span> <span class="n">pronto</span><span class="p">,</span> <span class="o">**</span><span class="n">logrotate</span><span class="o">**</span> <span class="n">configurado</span><span class="p">.</span>
+
+<span class="k">No</span> <span class="n">meu</span> <span class="n">caso</span><span class="p">,</span> <span class="n">eu</span> <span class="n">deixei</span> <span class="n">os</span> <span class="n">arquivos</span> <span class="n">de</span> <span class="n">log</span> <span class="n">com</span> <span class="k">no</span> <span class="n">máximo</span> <span class="mi">1</span><span class="n">M</span> <span class="n">de</span> <span class="n">tamanho</span><span class="p">,</span> <span class="n">mas</span> <span class="n">você</span> <span class="n">poderá</span> <span class="n">aumentar</span> <span class="n">para</span> <span class="n">quanto</span> <span class="n">quiser</span><span class="p">.</span>
+
+<span class="n">Caso</span> <span class="n">você</span> <span class="n">queria</span> <span class="o">**</span><span class="n">testar</span> <span class="n">o</span> <span class="n">logrotate</span><span class="o">**</span> <span class="n">e</span> <span class="n">ver</span> <span class="n">o</span> <span class="n">que</span> <span class="n">ele</span> <span class="n">vai</span> <span class="n">fazer</span><span class="p">,</span> <span class="k">execute</span> <span class="n">o</span> <span class="n">comando</span><span class="p">:</span>
+
+<span class="o">```</span> <span class="err">{</span><span class="p">.</span><span class="n">EnlighterJSRAW</span> <span class="n">enlighter</span><span class="o">-</span><span class="k">language</span><span class="o">=</span><span class="ss">&quot;shell&quot;</span><span class="err">}</span>
+<span class="n">logrotate</span> <span class="o">-</span><span class="n">df</span> <span class="o">/</span><span class="n">etc</span><span class="o">/</span><span class="n">logrotate</span><span class="p">.</span><span class="n">d</span><span class="o">/</span><span class="n">docker</span><span class="o">-</span><span class="n">container</span>
+</code></pre></div>
+
+
+<p>Obs: Além disso, mesmo configurando, havia um arquivo que parece ter corrompido e depois de muito pesquisar eu acabei tendo que apagar este arquivo, pois estava impedindo o <strong>logrotate</strong> de executar, já que ele parece usar este arquivo como referência para alguma coisa. Então, caso aconteça contigo, apague o arquivo <strong>"status" na pasta do logrotate</strong> com o comando:</p>
+<p><code>{.EnlighterJSRAW enlighter-language="null"}
+rm /var/lib/logrotate/status</code></p>
+<p>Bom, é isso pessoal. Espero que isso ajude a economizar espaço com os logs gerados pelo Docker. É claro que isto não se aplica só ao Docker, você pode criar regras para qualquer arquivo, basta especificar o pattern para os arquivos e colocar as regras.</p>
+<p>Ah, e no meu caso o espaço utilizado foi de 76% para 34% do disco, ou seja, 42% do disco era log do Docker.</p>
+<p>Obrigado e até o próximo post pessoal.</p>
+
+            <h4>Outros conteúdos relacionados</h4>
+            <dl class="dl-horizontal">
+                <dt>Sex 13 Maio 2016</dt>
+                <dd><a href="https://paulocoutinho.com/2016/05/13/osx-removendo-todos-os-arquivos-ds_store.html">OSX - Removendo todos os arquivos .DS_Store</a></dd>
+                <dt>Sáb 14 Setembro 2019</dt>
+                <dd><a href="https://paulocoutinho.com/2019/09/14/corrigindo-o-problema-de-permissao-no-wordpress-com-docker.html">Corrigindo o problema de permissão no Wordpress com Docker</a></dd>
+                <dt>Sex 16 Dezembro 2016</dt>
+                <dd><a href="https://paulocoutinho.com/2016/12/16/limpando-os-dados-do-docker-em-sua-maquina-containers-e-imagens.html">Limpando os dados do Docker em sua máquina (containers e imagens)</a></dd>
+                <dt>Seg 29 Fevereiro 2016</dt>
+                <dd><a href="https://paulocoutinho.com/2016/02/29/docker-toolbox-nova-ferramenta-que-ajuda-na-instalacao-e-configuracao-do-ambiente-em-forma-de-instalador.html">Docker Toolbox - Nova ferramenta que ajuda na instalação e configuração do ambiente em forma de instalador</a></dd>
+                <dt>Qui 02 Junho 2016</dt>
+                <dd><a href="https://paulocoutinho.com/2016/06/02/mobile-como-as-redes-de-anuncios-ad-networks-realizam-o-tracking-de-campanhas.html">Mobile - Como as redes de anúncios (Ad Networks) realizam o tracking de campanhas</a></dd>
+            </dl>
+
+    <div class="comments">
+        <div id="disqus_thread"></div>
+            <script type="text/javascript">
+                var disqus_shortname = 'paulo-coutinho';
+                var disqus_identifier = '2017/10/16/docker-post-install-o-que-fazer-depois-de-instalar.html';
+                var disqus_url = 'https://paulocoutinho.com/2017/10/16/docker-post-install-o-que-fazer-depois-de-instalar.html';
+                (function() {
+                    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+                    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+                })();
+            </script>
+        <noscript>Please enable JavaScript to view the comments.</noscript>
+    </div>
+        
+    </div>
+<!-- /Content -->
+
+<!-- Footer -->
+<div class="footer gradient-2">
+    <div class="container footer-container ">
+        <div class="row">
+            <div class="col-xs-4 col-sm-3 col-md-3 col-lg-3">
+                <div class="footer-title">Mapa do site</div>
+                <ul class="list-unstyled">
+                        <li><a href="https://paulocoutinho.com/archives.html">Arquivos</a></li>
+                        <li><a href="https://paulocoutinho.com/tags.html">Tags</a></li>
+                        <li><a href="https://paulocoutinho.com/authors.html">Autores</a></li>
+                        <li><a href="https://paulocoutinho.com/feeds/all.atom.xml" type="application/atom+xml"
+                               rel="alternate">Atom Feed</a></li>
+                        <li><a href="https://paulocoutinho.com/feed/rss.xml" type="application/rss+xml"
+                               rel="alternate">RSS Feed</a></li>
+                </ul>
+            </div>
+            <div class="col-xs-4 col-sm-3 col-md-3 col-lg-3">
+                    <div class="footer-title">Redes sociais</div>
+                    <ul class="list-unstyled">
+                            <li><a href="https://www.youtube.com/channel/UC9rytHKniMbIxvIr6CpX6Ow" target="_blank">YouTube</a></li>
+                            <li><a href="https://twitter.com/prsolucoes" target="_blank">Twitter</a></li>
+                    </ul>
+            </div>
+            <div class="col-xs-4 col-sm-3 col-md-3 col-lg-3">
+                    <div class="footer-title">Links</div>
+                    <ul class="list-unstyled">
+                            <li><a href="https://prsolucoes.com/" target="_blank">PRSoluções</a></li>
+                    </ul>
+            </div>
+            <div class="col-xs-12 col-sm-3 col-md-3 col-lg-3">
+                <div class="footer-title">Copyright</div>
+                <p>
+                    <small>&copy; Paulo Coutinho 2020</small>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /Footer -->
+</body>
+</html>
